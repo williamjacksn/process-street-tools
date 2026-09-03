@@ -84,9 +84,8 @@ def pg_upload_groups(cnx: psycopg2._psycopg.connection, batch: list[dict]) -> No
         insert into prst_groups (id, display_name) values (%(id)s, %(display_name)s)
         on conflict (id) do update set display_name = excluded.display_name
     """
-    with cnx:
-        with cnx.cursor() as cur:
-            psycopg2.extras.execute_batch(cur, sql, batch)
+    with cnx, cnx.cursor() as cur:
+        psycopg2.extras.execute_batch(cur, sql, batch)
 
 
 def pg_upload_users(cnx: psycopg2._psycopg.connection, batch: list[dict]) -> None:
@@ -98,9 +97,8 @@ def pg_upload_users(cnx: psycopg2._psycopg.connection, batch: list[dict]) -> Non
         ) on conflict (id) do update set
             user_name = excluded.user_name, display_name = excluded.display_name
     """
-    with cnx:
-        with cnx.cursor() as cur:
-            psycopg2.extras.execute_batch(cur, sql, batch)
+    with cnx, cnx.cursor() as cur:
+        psycopg2.extras.execute_batch(cur, sql, batch)
 
 
 def process_group(cnx: psycopg2._psycopg.connection, group_def: GroupDef) -> None:
@@ -196,7 +194,7 @@ def main() -> None:
     notch.configure()
     repeat = os.getenv("REPEAT", "false").lower() in ("1", "on", "true", "yes")
     if repeat:
-        repeat_interval_hours = int(os.getenv("REPEAT_INTERVAL_HOURS", 24))
+        repeat_interval_hours = int(os.getenv("REPEAT_INTERVAL_HOURS", "24"))
         plural = "" if repeat_interval_hours == 1 else "s"
         log.info(f"This job will repeat every {repeat_interval_hours} hour{plural}")
         log.info(
