@@ -6,16 +6,16 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "apscheduler>=3.11.3",
-    "datime>=2025.0",
+    "datime>=2026.0",
     "httpx>=0.28.1",
-    "notch>=2025.2",
-    "psycopg2-binary>=2.9.12",
+    "notch>=2026.0",
+    "psycopg2-binary>=2.9.13",
 ]
 
 [dependency-groups]
 dev = [
     "ruff>=0.17.2",
-    "ty>=0.0.63",
+    "ty>=0.0.91",
 ]
 
 [tool.ruff.lint]
